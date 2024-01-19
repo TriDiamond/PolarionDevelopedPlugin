@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module id="Drx_Baseline_Widget"  version="1.0.0">
+	
+	
+	<contribution configuration-id="com.polarion.alm.richpages.widgets">
+		<widget id="com.polarion.Intelizign.Drx_Baseline_Widget" instance="instance:com.polarion.Intelizign.Baseline.Drx_Baseline_Widget"/>
+	</contribution>
+		
+</module>
