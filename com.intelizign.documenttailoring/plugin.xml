@@ -1,0 +1,11 @@
+<plugin>
+   <extension
+         point="com.polarion.portal.tomcat.webapps">
+      <webapp
+            contextRoot="webapp"
+            name="polarion/documentbuilder"
+            priority="0">
+      </webapp>
+   </extension>
+
+</plugin>

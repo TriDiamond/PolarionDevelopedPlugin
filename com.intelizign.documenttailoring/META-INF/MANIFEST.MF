@@ -1,0 +1,17 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Documentbuilder
+Bundle-SymbolicName: com.intelizign.documenttailoring;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-ClassPath: Tailoringlibrary.jar
+Bundle-Vendor: INTELIZIGN
+Export-Package: com.intelizign.documenttailoring;version="1.0.0.qualifier"
+Require-Bundle: com.polarion.portal.tomcat;bundle-version="9.0.40",
+ com.polarion.alm.projects;bundle-version="3.21.2",
+ com.polarion.alm.tracker;bundle-version="3.21.2",
+ com.polarion.alm.ui;bundle-version="3.21.2",
+ com.fasterxml.jackson.jaxrs;bundle-version="2.11.1",
+ com.fasterxml.jackson;bundle-version="2.11.1",
+ org.jsoup;bundle-version="1.14.3"
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Automatic-Module-Name: com.intelizign.module.documentbuilder.singleton.true
