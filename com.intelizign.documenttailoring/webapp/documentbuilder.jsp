@@ -489,6 +489,7 @@ rotate(
 	            }
 	            if (selectMultiDocument === null) {
 	                alert("Please Select Document")
+	                
 	                return
 	            }
 	        }

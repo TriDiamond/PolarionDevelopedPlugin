@@ -1,6 +1,9 @@
 package com.intelizign.documenttailoring;
 
+import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -170,6 +173,8 @@ public class DocumentTailoringGetService {
 			e.printStackTrace();
 		}
 	}
+
+	
 
 	// DocumentList action get all document from the selected project when user
 	// select Project

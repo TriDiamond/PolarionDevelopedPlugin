@@ -2,9 +2,14 @@ package com.intelizign.documenttailoring;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.StringReader;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -18,6 +23,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Node;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -33,6 +39,7 @@ import com.polarion.alm.tracker.model.IWorkItem;
 import com.polarion.core.util.types.Text;
 import com.polarion.platform.ITransactionService;
 import com.polarion.platform.core.PlatformContext;
+import com.polarion.platform.persistence.UnresolvableObjectException;
 import com.polarion.platform.security.ISecurityService;
 import com.polarion.subterra.base.location.ILocation;
 import com.polarion.subterra.base.location.Location;
@@ -275,4 +282,91 @@ public class DocumentTailoringPostService {
 			resp.getWriter().write("{\"warningMessage\":" + warningMessageNotify + "}");
 		}
 	}
+	
+	/*************************************************/
+
+	// Function to read JSON data from file
+	public static String readJSONFile(String filePath) throws IOException {
+		return new String(Files.readAllBytes(Paths.get(filePath)));
+	}
+
+	 // Function to get components by category
+	public SimpleEntry<List<String>, List<String>> getComponentsByCategory(String jsonData, String category) throws IOException {
+	    ObjectMapper objectMapper = new ObjectMapper();
+	    List<Map<String, String>> dataList = objectMapper.readValue(jsonData, new TypeReference<List<Map<String, String>>>() {});
+	    System.out.println("Data List is" + dataList + "\n");
+	    
+	    // Collect components under the specified category
+	    List<String> components = new ArrayList<>();
+	    List<String> allComponents = new ArrayList<>();
+	    
+	    for (Map<String, String> item : dataList) {
+	        allComponents.add(item.get("component"));
+	        if (category.equalsIgnoreCase(item.get("category"))) {
+	            components.add(item.get("component"));
+	        }
+	    }
+
+	    return new SimpleEntry<>(components, allComponents);
+	}
+
+	
+	
+
+	public void getPartEvaluationData(HttpServletRequest req, HttpServletResponse resp)
+			throws UnresolvableObjectException, IOException {
+		System.out.println("Its working");
+		String filePath = "D:/JSON/sample.json";
+		 StringBuilder requestBody = new StringBuilder();
+	        try (BufferedReader reader = new BufferedReader(new InputStreamReader(req.getInputStream()))) {
+	            String line;
+	            while ((line = reader.readLine()) != null) {
+	                requestBody.append(line);
+	            }
+	        }
+
+	        // Parse the JSON data
+	        ObjectMapper mapper = new ObjectMapper();
+	        JsonNode requestData = mapper.readTree(requestBody.toString());
+
+	        // Extract values from the JSON object
+	        String wiID = requestData.get("wiID").asText();
+	        String projectID = requestData.get("projectID").asText();
+	        String componentVal = requestData.get("componentVal").asText();
+	        String categoryVal = requestData.get("categoryVal").asText();
+
+	        // Now you can use these values as needed
+	        System.out.println("wiID: " + wiID);
+	        System.out.println("projectID: " + projectID);
+	        System.out.println("componentVal: " + componentVal);
+	        System.out.println("categoryVal: " + categoryVal);
+        try {
+            String jsonData = readJSONFile(filePath);
+
+            // Get components by category
+            SimpleEntry<List<String>, List<String>> result = getComponentsByCategory(jsonData, categoryVal);
+            List<String> components = result.getKey();
+            List<String> allComponents = result.getValue();
+            System.out.println("List of Components"+components);
+            // Create response object
+            Map<String, Object> responseObject = new HashMap<>();
+            responseObject.put("components", components);
+            responseObject.put("allComponents", allComponents);
+            ObjectMapper objectMapper = new ObjectMapper();
+            String jsonResponse = objectMapper.writeValueAsString(responseObject);
+
+            resp.setContentType("application/json");
+
+            resp.getWriter().write(jsonResponse);
+            
+        } catch (IOException e) {
+            System.err.println("Error reading JSON file: " + e.getMessage());
+        }
+	}
+
+	/*****************************************************/
+	
+	
+	
+	
 }

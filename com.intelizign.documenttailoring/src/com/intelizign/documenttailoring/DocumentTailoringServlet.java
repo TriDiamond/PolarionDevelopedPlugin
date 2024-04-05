@@ -26,7 +26,8 @@ public class DocumentTailoringServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		try {
-			tailoringPostService.createDocument(req,resp);
+			//tailoringPostService.createDocument(req,resp);	case "getPartEvaluationData":
+			tailoringPostService.getPartEvaluationData(req,resp);
 		}catch(Exception e) {
 			log.error("Exception is" + e.getMessage());
 		}
@@ -39,10 +40,12 @@ public class DocumentTailoringServlet extends HttpServlet {
 	@Override
 	protected void doGet(final HttpServletRequest req, final HttpServletResponse resp)
 			throws ServletException, IOException {
+		System.out.println("Its working");
 		String action = req.getParameter("action");
 		try {
 			switch (action) {
 			case "getProjectList":
+				System.out.println("Its working projectList");
 				tailoringGetService.getProjectList(req, resp);
 				break;
 			case "getDocumentList":

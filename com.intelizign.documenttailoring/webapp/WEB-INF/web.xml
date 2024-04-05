@@ -22,6 +22,7 @@
 		<servlet-name>DocumentTailoringServlet</servlet-name>
 		<url-pattern>/Tailoring</url-pattern>
 	</servlet-mapping>
+	
 	<welcome-file-list>
 		<welcome-file>documentbuilder.jsp</welcome-file>
 	</welcome-file-list>
